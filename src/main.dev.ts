@@ -10,6 +10,7 @@
  */
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
+import glob from 'glob';
 import path from 'path';
 import { app, BrowserWindow, shell } from 'electron';
 import { autoUpdater } from 'electron-updater';
@@ -37,6 +38,15 @@ if (
 ) {
   require('electron-debug')();
 }
+
+const loadMainProcess = () => {
+  var files = glob.sync(path.join(__dirname, 'main-process/**/*.js'))
+
+  files.forEach(function (file) {
+    require(file)
+  })
+}
+loadMainProcess()
 
 const installExtensions = async () => {
   const installer = require('electron-devtools-installer');
